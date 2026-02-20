@@ -41,17 +41,6 @@ body {
 }
 
 /* Subtle grid texture */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(78, 156, 215, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(78, 156, 215, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-  z-index: 0;
-}
 
 .app {
   position: relative;
@@ -189,18 +178,6 @@ h1 span {
   overflow: hidden;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(78, 156, 215, 0.2), transparent);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
 .card:hover {
   background: var(--surface-hover);
   border-color: var(--border-hover);
@@ -208,22 +185,10 @@ h1 span {
   transform: translateY(-2px);
 }
 
-.card:hover::before { opacity: 1; }
-
 .card-active {
   border-left: 2px solid var(--green);
 }
 
-.card-active::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 60px;
-  background: linear-gradient(90deg, rgba(34, 197, 94, 0.06), transparent);
-  pointer-events: none;
-}
 
 .card-header {
   display: flex;
@@ -379,7 +344,7 @@ h1 span {
 .mission-header {
   margin-bottom: 2rem;
   padding: 2rem 2.25rem;
-  background: linear-gradient(135deg, rgba(26, 90, 150, 0.15), rgba(212, 168, 67, 0.06));
+  background: rgba(26, 90, 150, 0.08);
   border: 1px solid var(--border);
   border-radius: 14px;
   backdrop-filter: var(--glass-blur);
@@ -394,7 +359,7 @@ h1 span {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary));
+  background: var(--color-primary);
 }
 
 .mission-title {
