@@ -74,10 +74,6 @@ function MissionControl({ projects }) {
 
   return (
     <section className="mission-section">
-      <div className="mission-header">
-        <h2 className="mission-title">Mission Control</h2>
-        <p className="mission-statement">{MISSION.statement}</p>
-      </div>
       <div className="pillars">
         {MISSION.pillars.map(pillar => {
           const pillarProjects = pillar.projects.map(name => projectMap[name.toLowerCase()]).filter(Boolean)
@@ -120,7 +116,6 @@ function MissionControl({ projects }) {
 function App() {
   const [data, setData] = useState(null)
   const [filter, setFilter] = useState('all')
-  const [view, setView] = useState('mission')
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -154,10 +149,9 @@ function App() {
     <div className="app">
       <header>
         <div className="header-top">
-          <h1>dash<span>board</span></h1>
-          <div className="view-toggle">
-            <button className={view === 'mission' ? 'active' : ''} onClick={() => setView('mission')}>mission</button>
-            <button className={view === 'projects' ? 'active' : ''} onClick={() => setView('projects')}>projects</button>
+          <div className="header-left">
+            <h1>dash<span>board</span></h1>
+            <p className="mission-statement-header">{MISSION.statement}</p>
           </div>
         </div>
         <div className="stats-row">
@@ -180,21 +174,17 @@ function App() {
         </div>
       </header>
 
-      {view === 'mission' && <MissionControl projects={projects} />}
+      <MissionControl projects={projects} />
 
-      {view === 'projects' && (
-        <>
-          <div className="filters">
-            {['all', 'today', 'live', 'failing'].map(f => (
-              <button key={f} className={filter === f ? 'active' : ''} onClick={() => setFilter(f)}>{f}</button>
-            ))}
-          </div>
-          <main className="grid">
-            {filtered.map(p => <ProjectCard key={p.name} project={p} />)}
-            {filtered.length === 0 && <p className="empty">No projects match this filter.</p>}
-          </main>
-        </>
-      )}
+      <div className="filters">
+        {['all', 'today', 'live', 'failing'].map(f => (
+          <button key={f} className={filter === f ? 'active' : ''} onClick={() => setFilter(f)}>{f}</button>
+        ))}
+      </div>
+      <main className="grid">
+        {filtered.map(p => <ProjectCard key={p.name} project={p} />)}
+        {filtered.length === 0 && <p className="empty">No projects match this filter.</p>}
+      </main>
     </div>
   )
 }

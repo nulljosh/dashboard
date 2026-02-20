@@ -58,8 +58,22 @@ header {
 .header-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   margin-bottom: 2rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-statement-header {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+  max-width: 600px;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 h1 {
@@ -312,71 +326,9 @@ h1 span {
   .header-top { flex-direction: column; gap: 0.5rem; }
 }
 
-/* View Toggle */
-.view-toggle {
-  display: flex;
-  gap: 2px;
-  background: var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.view-toggle button {
-  background: var(--color-bg-2);
-  border: none;
-  color: var(--text-muted);
-  padding: 0.45rem 1rem;
-  font-family: var(--font-primary);
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.view-toggle button:hover { color: var(--text-secondary); }
-.view-toggle button.active { background: var(--color-primary); color: white; }
-
 /* Mission Section */
 .mission-section {
   margin-bottom: 2rem;
-}
-
-.mission-header {
-  margin-bottom: 2rem;
-  padding: 2rem 2.25rem;
-  background: rgba(26, 90, 150, 0.08);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  backdrop-filter: var(--glass-blur);
-  position: relative;
-  overflow: hidden;
-}
-
-.mission-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--color-primary);
-}
-
-.mission-title {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 0.65rem;
-  letter-spacing: -0.02em;
-}
-
-.mission-statement {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  max-width: 700px;
-  font-weight: 400;
 }
 
 /* Pillars */
