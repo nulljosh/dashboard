@@ -57,9 +57,70 @@ function getTimeAgo(date) {
   return Math.floor(diff / 86400) + 'd ago'
 }
 
+const MISSION = {
+  statement: "Build, ship, and understand everything — from silicon to software to markets. No abstractions left unbroken.",
+  pillars: [
+    { name: "Systems", desc: "OS, compilers, debuggers, runtimes — understand the machine top to bottom", projects: ["NullOS", "nullC", "shell", "debugger", "container-runtime", "jit", "jot", "profiler"] },
+    { name: "Intelligence", desc: "Train models, not just use them — be in the room where it happens", projects: ["core", "shannon", "search-engine", "static-analyzer"] },
+    { name: "Markets", desc: "Financial literacy through building — trading sims, trackers, arbitrage", projects: ["rise", "finn", "arby", "mop", "dexter"] },
+    { name: "Product", desc: "Ship real things people use — fast iteration, live deploys, portfolio brand", projects: ["tally", "spark", "scroll", "journal", "books", "dose", "wikiscroll"] },
+    { name: "Automation", desc: "If you do it twice, automate it — music, food, calls, grading", projects: ["tuneflow", "dominos", "starbot", "callie", "quizz"] },
+  ]
+}
+
+function MissionControl({ projects }) {
+  const projectMap = {}
+  projects.forEach(p => { projectMap[p.name.toLowerCase()] = p })
+
+  return (
+    <section className="mission-section">
+      <div className="mission-header">
+        <h2 className="mission-title">Mission Control</h2>
+        <p className="mission-statement">{MISSION.statement}</p>
+      </div>
+      <div className="pillars">
+        {MISSION.pillars.map(pillar => {
+          const pillarProjects = pillar.projects.map(name => projectMap[name.toLowerCase()]).filter(Boolean)
+          const activeToday = pillarProjects.filter(p => p.updatedToday).length
+          const totalProjects = pillarProjects.length
+          const allPassing = pillarProjects.every(p => p.ci !== 'failure' && p.vercel !== 'failure')
+
+          return (
+            <div key={pillar.name} className="pillar">
+              <div className="pillar-header">
+                <div className="pillar-title-row">
+                  <h3 className="pillar-name">{pillar.name}</h3>
+                  <span className={`pillar-health ${allPassing ? 'health-good' : 'health-bad'}`}>
+                    {allPassing ? 'HEALTHY' : 'DEGRADED'}
+                  </span>
+                </div>
+                <p className="pillar-desc">{pillar.desc}</p>
+              </div>
+              <div className="pillar-stats">
+                <span className="pillar-stat">{totalProjects} projects</span>
+                <span className="pillar-divider">/</span>
+                <span className="pillar-stat">{activeToday} active today</span>
+              </div>
+              <div className="pillar-projects">
+                {pillarProjects.map(p => (
+                  <a key={p.name} href={p.github} target="_blank" rel="noopener"
+                     className={`pillar-project ${p.updatedToday ? 'pillar-project-active' : ''}`}>
+                    {p.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 function App() {
   const [data, setData] = useState(null)
   const [filter, setFilter] = useState('all')
+  const [view, setView] = useState('mission')
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -94,7 +155,10 @@ function App() {
       <header>
         <div className="header-top">
           <h1>dash<span>board</span></h1>
-          <span className="generated">Last scan: {new Date(data.generated).toLocaleString()}</span>
+          <div className="view-toggle">
+            <button className={view === 'mission' ? 'active' : ''} onClick={() => setView('mission')}>mission</button>
+            <button className={view === 'projects' ? 'active' : ''} onClick={() => setView('projects')}>projects</button>
+          </div>
         </div>
         <div className="stats-row">
           <div className="stat">
@@ -114,16 +178,23 @@ function App() {
             <span className="stat-label">failing</span>
           </div>
         </div>
-        <div className="filters">
-          {['all', 'today', 'live', 'failing'].map(f => (
-            <button key={f} className={filter === f ? 'active' : ''} onClick={() => setFilter(f)}>{f}</button>
-          ))}
-        </div>
       </header>
-      <main className="grid">
-        {filtered.map(p => <ProjectCard key={p.name} project={p} />)}
-        {filtered.length === 0 && <p className="empty">No projects match this filter.</p>}
-      </main>
+
+      {view === 'mission' && <MissionControl projects={projects} />}
+
+      {view === 'projects' && (
+        <>
+          <div className="filters">
+            {['all', 'today', 'live', 'failing'].map(f => (
+              <button key={f} className={filter === f ? 'active' : ''} onClick={() => setFilter(f)}>{f}</button>
+            ))}
+          </div>
+          <main className="grid">
+            {filtered.map(p => <ProjectCard key={p.name} project={p} />)}
+            {filtered.length === 0 && <p className="empty">No projects match this filter.</p>}
+          </main>
+        </>
+      )}
     </div>
   )
 }
